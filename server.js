@@ -10,6 +10,8 @@ const jobs = require("./routes/jobs");
 
 const app = express();
 
+app.use(express.json());
+
 //routes
 app.use("/api/jobs", jobs);
 
