@@ -22,10 +22,8 @@ export const getAllJobs = async () => {
 
 export const updateJobById = async (id, data) => {
   try {
-    console.log(data);
     const res = await axios.put(`/api/jobs/${id}`, data);
-
-    return res.data.data;
+    return res.data;
   } catch (err) {
     return err;
   }

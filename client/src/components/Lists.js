@@ -64,9 +64,9 @@ const useStyles = makeStyles({
   },
   badge: {
     backgroundColor: (props) => props.badageColor,
-    "@media (max-width: 780px)": {
-      transform: "scale(0.75) translate(-100%, -50%)",
-    },
+    // "@media (max-width: 780px)": {
+    //   transform: "scale(0.75) translate(-100%, -50%)",
+    // },
   },
 });
 
@@ -103,7 +103,7 @@ const LgTypography = withStyles({
 
 export default function Lists(props) {
   const {
-    id,
+    crtJob,
     jobTitle,
     companyName,
     appliedDate,
@@ -157,7 +157,7 @@ export default function Lists(props) {
         </div>
         <div className={classes.listControl}>
           <button>x</button>
-          <button onClick={() => handleClickOpen(id)}>Edit</button>
+          <button onClick={() => handleClickOpen(crtJob)}>Edit</button>
         </div>
       </Paper>
     </div>

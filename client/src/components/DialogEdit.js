@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogActions,
@@ -11,12 +11,18 @@ import {
 //axios api
 import * as jobApi from "../api/jobs";
 
-export default function DialogEdit({ openEdit, handleClose, crtId }) {
-  //0:event.target.name 1:display text
+export default function DialogEdit({
+  openEdit,
+  handleClose,
+  crtJob,
+  setCrtJob,
+  setUpdateSuccess,
+}) {
+  //0:event.target.name 1:display text 2:defult value
   const inputs = [
-    ["jobTitle", "Title"],
-    ["jobLevel", "Level"],
-    ["companyName", "Company"],
+    ["jobTitle", "Job Title"],
+    ["jobLevel", "Job Level"],
+    ["companyName", "Company Name"],
     ["source", "Source"],
     ["appliedDate", "Applied date"],
     ["state", "State"],
@@ -30,15 +36,31 @@ export default function DialogEdit({ openEdit, handleClose, crtId }) {
     appliedDate: "",
     state: "",
   });
+  //copy crtJob value as default value for each input
+  useEffect(() => {
+    setUpdatedJob({
+      jobTitle: crtJob.title,
+      jobLevel: crtJob.level,
+      companyName: crtJob.company,
+      source: crtJob.source,
+      appliedDate: "",
+      state: crtJob.state,
+    });
+  }, [crtJob]);
   //handle input change
   const handleChange = (event) => {
     setUpdatedJob({ ...updatedJob, [event.target.name]: event.target.value });
   };
   //dialog submit btn
   const handleSubmit = async () => {
-    let res = await jobApi.updateJobById(crtId, updatedJob);
-    console.log(updatedJob);
+    let res = await jobApi.updateJobById(crtJob._id, updatedJob);
+    console.log(res);
+    if (res.success) {
+      handleClose();
+      setUpdateSuccess(true);
+    }
   };
+
   return (
     <Dialog
       open={openEdit}
@@ -52,10 +74,9 @@ export default function DialogEdit({ openEdit, handleClose, crtId }) {
           {inputs.map((e, i) => (
             <InputBase
               key={i}
-              id={e[1]}
               name={e[0]}
               placeholder={e[1]}
-              inputProps={{ "aria-label": e[1] }}
+              value={updatedJob[e[0]] || ""}
               onChange={handleChange}
             ></InputBase>
           ))}
