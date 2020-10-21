@@ -32,6 +32,7 @@ exports.addJobs = async (req, res, next) => {
   } catch (err) {
     if (err.name === "ValidationError") {
       const messages = Object.values(err.errors).map((e) => e.message);
+
       res.status(400).json({
         success: false,
         error: messages,
@@ -82,8 +83,11 @@ exports.updateJobs = async (req, res, next) => {
       });
     }
     await job.updateOne({
-      title: req.body.title,
-      level: req.body.level,
+      title: req.body.jobTitle,
+      level: req.body.jobLevel,
+      company: req.body.companyName,
+      source: req.body.source,
+      appliedDate: req.body.appliedDate,
       state: req.body.state,
     });
     return res.status(200).json({
@@ -91,7 +95,7 @@ exports.updateJobs = async (req, res, next) => {
       data: "job updated",
     });
   } catch (err) {
-    return res.send(500).json({
+    return res.status(500).json({
       success: false,
       error: err.message,
     });

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+
 //components
 import Header from "../components/Header";
 import Filter from "../components/Filter";
 import Lists from "../components/Lists";
+import DialogEdit from "../components/DialogEdit";
 //axios api
 import * as jobApi from "../api/jobs";
 
@@ -25,8 +27,9 @@ const useStyles = makeStyles({
 export default function Main() {
   const classes = useStyles();
   const [jobLists, setJobLists] = useState([]);
-
-  //load data when mounted
+  const [openEdit, setOpenEdit] = useState(false);
+  const [crtId, setCrtId] = useState("");
+  //load job data when mounted
   useEffect(() => {
     const getJobLists = async () => {
       let res = await jobApi.getAllJobs();
@@ -34,6 +37,18 @@ export default function Main() {
     };
     getJobLists();
   }, []);
+
+  //dialog
+  const handleClickOpen = (id) => {
+    setOpenEdit(true);
+    setCrtId(id);
+  };
+
+  const handleClose = () => {
+    setOpenEdit(false);
+    setCrtId("");
+  };
+
   const text = [
     {
       jobTitle: "Full-stack Developer",
@@ -94,17 +109,25 @@ export default function Main() {
             jobLists.map((jobList, i) => (
               <Lists
                 key={i}
+                id={jobList._id}
                 jobTitle={jobList.title}
                 jobLevel={jobList.level}
-                companyName={jobList.companyName}
-                submitDate={jobList.submitDate}
+                companyName={jobList.company}
+                appliedDate={jobList.appliedDate}
                 source={jobList.source}
-                jobState={jobList.jobState}
+                jobState={jobList.state}
+                handleClickOpen={handleClickOpen}
               />
             ))
           )}
         </Paper>
       </Grid>
+      <DialogEdit
+        openEdit={openEdit}
+        handleClose={handleClose}
+        handleClickOpen={handleClickOpen}
+        crtId={crtId}
+      />
     </Grid>
   );
 }

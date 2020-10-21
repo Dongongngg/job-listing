@@ -103,12 +103,14 @@ const LgTypography = withStyles({
 
 export default function Lists(props) {
   const {
+    id,
     jobTitle,
     companyName,
-    submitDate,
+    appliedDate,
     source,
     jobState,
     jobLevel,
+    handleClickOpen,
   } = props;
   //props for makeStyles
   const styleProps = {
@@ -147,7 +149,7 @@ export default function Lists(props) {
           <SmTypography>{companyName}</SmTypography>
         </div>
         <div className={classes.listMid}>
-          <MdTypography>{submitDate}</MdTypography>
+          <MdTypography>{appliedDate}</MdTypography>
           <LgTypography>{source}</LgTypography>
         </div>
         <div className={classes.listState}>
@@ -155,7 +157,7 @@ export default function Lists(props) {
         </div>
         <div className={classes.listControl}>
           <button>x</button>
-          <button>Edit</button>
+          <button onClick={() => handleClickOpen(id)}>Edit</button>
         </div>
       </Paper>
     </div>

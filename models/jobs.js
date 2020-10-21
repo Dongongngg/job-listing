@@ -10,13 +10,10 @@ const JobSchema = new monogoos.Schema({
     type: String,
     trim: true,
   },
-  description: {
+  company: {
     type: String,
   },
   source: {
-    type: String,
-  },
-  location: {
     type: String,
   },
   appliedDate: {
