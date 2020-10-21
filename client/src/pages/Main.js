@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -6,6 +6,8 @@ import Grid from "@material-ui/core/Grid";
 import Header from "../components/Header";
 import Filter from "../components/Filter";
 import Lists from "../components/Lists";
+//axios api
+import * as jobApi from "../api/jobs";
 
 const useStyles = makeStyles({
   root: {
@@ -24,9 +26,18 @@ export default function Main() {
   const classes = useStyles();
   const [jobLists, setJobLists] = useState([]);
 
+  //load data when mounted
+  useEffect(() => {
+    const getJobLists = async () => {
+      let res = await jobApi.getAllJobs();
+      setJobLists(res);
+    };
+    getJobLists();
+  }, []);
   const text = [
     {
       jobTitle: "Full-stack Developer",
+      jobLevel: "Junior",
       companyName: "My Company adadasdad",
       submitDate: "21/10/2020",
       source: "Seek",
@@ -34,6 +45,7 @@ export default function Main() {
     },
     {
       jobTitle: "Full-stack Developer",
+      jobLevel: "Middle",
       companyName: "Metigy",
       submitDate: "14/10/2020",
       source: "LinkedIn",
@@ -41,6 +53,7 @@ export default function Main() {
     },
     {
       jobTitle: "Full-stack Developer",
+      jobLevel: "Senior",
       companyName: "Purple Patch Consulting ",
       submitDate: "12/10/2020",
       source: "LinkedIn",
@@ -48,6 +61,15 @@ export default function Main() {
     },
     {
       jobTitle: "WordPress Developer",
+      jobLevel: "Senior",
+      companyName: "My Company adadasdad",
+      submitDate: "21/10/2020",
+      source: "Seek",
+      jobState: "Interview",
+    },
+    {
+      jobTitle: "WordPress Developer",
+      jobLevel: "Junior",
       companyName: "My Company adadasdad",
       submitDate: "21/10/2020",
       source: "Seek",
@@ -66,16 +88,21 @@ export default function Main() {
         <Paper className={classes.paper} elevation={10}>
           <Header count={text.length} />
           <Filter />
-          {text.map((jobList, i) => (
-            <Lists
-              key={i}
-              jobTitle={jobList.jobTitle}
-              companyName={jobList.companyName}
-              submitDate={jobList.submitDate}
-              source={jobList.source}
-              jobState={jobList.jobState}
-            />
-          ))}
+          {jobLists.length === 0 ? (
+            <h1>Loading...</h1>
+          ) : (
+            jobLists.map((jobList, i) => (
+              <Lists
+                key={i}
+                jobTitle={jobList.title}
+                jobLevel={jobList.level}
+                companyName={jobList.companyName}
+                submitDate={jobList.submitDate}
+                source={jobList.source}
+                jobState={jobList.jobState}
+              />
+            ))
+          )}
         </Paper>
       </Grid>
     </Grid>

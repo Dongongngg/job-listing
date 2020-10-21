@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import Badge from "@material-ui/core/Badge";
+
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -41,6 +43,7 @@ const useStyles = makeStyles({
     fontSize: "calc(15px + 0.5vw)",
   },
   listState: {
+    backgroundColor: (props) => props.stateColor,
     borderRadius: "20px",
     height: "5vh",
     width: "10vw",
@@ -59,8 +62,15 @@ const useStyles = makeStyles({
     flexDirection: "column",
     justifyContent: "space-between",
   },
+  badge: {
+    backgroundColor: (props) => props.badageColor,
+    "@media (max-width: 780px)": {
+      transform: "scale(0.75) translate(-100%, -50%)",
+    },
+  },
 });
 
+//customize fonts
 const SmTypography = withStyles({
   root: {
     fontSize: "calc(10px + 0.3vw)",
@@ -83,8 +93,8 @@ const MdTypography = withStyles({
 
 const LgTypography = withStyles({
   root: {
-    fontSize: "calc(17px + 0.3vw)",
-    fontWeight: "600",
+    fontSize: "calc(14px + 0.3vw)",
+    fontWeight: "500",
     "@media (max-width: 780px)": {
       lineHeight: 1.25,
     },
@@ -92,33 +102,55 @@ const LgTypography = withStyles({
 })(Typography);
 
 export default function Lists(props) {
-  const { jobTitle, companyName, submitDate, source, jobState } = props;
-  const classes = useStyles(props);
+  const {
+    jobTitle,
+    companyName,
+    submitDate,
+    source,
+    jobState,
+    jobLevel,
+  } = props;
+  //props for makeStyles
+  const styleProps = {
+    badageColor:
+      jobLevel === "Junior"
+        ? "#4caf50"
+        : jobLevel === "Middle"
+        ? "#ffc107"
+        : jobLevel === "Senior"
+        ? "#9e9e9e"
+        : null,
+    stateColor:
+      jobState === "Submit"
+        ? "#00BCD4"
+        : jobState === "Interview"
+        ? "#8BC34A"
+        : jobState === "Test"
+        ? "#FFC107"
+        : null,
+  };
+  const classes = useStyles(styleProps);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper} elevation={5}>
         <div className={classes.listLeft}>
-          <LgTypography>{jobTitle}</LgTypography>
+          <Badge
+            badgeContent={jobLevel}
+            classes={{
+              badge: classes.badge,
+            }}
+          >
+            <LgTypography>{jobTitle}</LgTypography>
+          </Badge>
+
           <SmTypography>{companyName}</SmTypography>
         </div>
         <div className={classes.listMid}>
           <MdTypography>{submitDate}</MdTypography>
           <LgTypography>{source}</LgTypography>
         </div>
-        <div
-          className={classes.listState}
-          style={{
-            backgroundColor:
-              jobState === "Submit"
-                ? "#00BCD4"
-                : jobState === "Interview"
-                ? "#8BC34A"
-                : jobState === "Test"
-                ? "#FFC107"
-                : null,
-          }}
-        >
+        <div className={classes.listState}>
           <LgTypography className={classes.state}>{jobState}</LgTypography>
         </div>
         <div className={classes.listControl}>
