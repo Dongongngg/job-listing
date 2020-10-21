@@ -13,6 +13,9 @@ const JobSchema = new monogoos.Schema({
   description: {
     type: String,
   },
+  source: {
+    type: String,
+  },
   location: {
     type: String,
   },

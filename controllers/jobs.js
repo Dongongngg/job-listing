@@ -81,10 +81,19 @@ exports.updateJobs = async (req, res, next) => {
         error: "No job found",
       });
     }
-    await job.updateOne({ title: req.body.title, level: req.body.level });
+    await job.updateOne({
+      title: req.body.title,
+      level: req.body.level,
+      state: req.body.state,
+    });
     return res.status(200).json({
       success: true,
       data: "job updated",
     });
-  } catch (err) {}
+  } catch (err) {
+    return res.send(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
 };
