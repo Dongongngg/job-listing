@@ -3,6 +3,7 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Badge from "@material-ui/core/Badge";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const useStyles = makeStyles({
   root: {
@@ -15,119 +16,113 @@ const useStyles = makeStyles({
   },
   paper: {
     backgroundColor: "#01579B",
-    height: "7.5vh",
+    height: "8vh",
     width: "100%",
     padding: "0.5rem",
+    borderRadius: "1rem",
     "@media (max-width: 780px)": {
       padding: "0.5rem",
     },
-    borderRadius: "10px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    position: "relative",
     color: "white",
   },
   listLeft: {
-    maxWidth: "45%",
-    height: "100%",
-    display: "flex",
+    height: "8vh",
+    maxWidth: "33%",
+    display: "inline-flex",
     flexDirection: "column",
     justifyContent: "space-between",
     fontSize: "calc(10px + 0.5vw)",
   },
   listMid: {
-    height: "100%",
-    display: "flex",
+    height: "8vh",
+    position: "absolute",
+    left: "38%",
+    display: "inline-flex",
     flexDirection: "column",
     justifyContent: "space-between",
     fontSize: "calc(15px + 0.5vw)",
   },
   listState: {
-    backgroundColor: (props) => props.stateColor,
-    borderRadius: "20px",
-    height: "5vh",
-    width: "10vw",
-    display: "flex",
+    display: "inline-flex",
     justifyContent: "center",
     alignItems: "center",
+    height: "8vh",
+    right: "15%",
+    position: "absolute",
+    minWidth: "20%",
+  },
+  stateBox: {
+    textAlign: "center",
+    backgroundColor: (props) => props.stateColor,
+    borderRadius: "0.5rem",
   },
   state: {
+    padding: "0.5rem",
     "@media (max-width: 780px)": {
-      fontSize: "calc(10px + 0.3vw) !important",
+      fontSize: "calc(12px + 0.3vw) !important",
+      padding: "0.25rem",
     },
   },
   listControl: {
-    height: "100%",
-    display: "flex",
+    height: "8vh",
+    position: "absolute",
+    display: "inline-flex",
     flexDirection: "column",
     justifyContent: "space-between",
+    right: "0.5rem",
+  },
+  icon: {
+    cursor: "pointer",
+    "@media (max-width: 780px)": {
+      fontSize: "1rem",
+    },
   },
   badge: {
     backgroundColor: (props) => props.badageColor,
-    // "@media (max-width: 780px)": {
-    //   transform: "scale(0.75) translate(-100%, -50%)",
-    // },
+    "@media (max-width: 780px)": {
+      transform: "scale(0.75) translate(-50%,-50%)",
+    },
   },
 });
 
 //customize fonts
 const SmTypography = withStyles({
   root: {
-    fontSize: "calc(10px + 0.3vw)",
+    fontSize: "calc(12px + 0.3vw)",
     fontWeight: "500",
-    "@media (max-width: 780px)": {
-      lineHeight: 1,
-    },
-  },
-})(Typography);
-
-const MdTypography = withStyles({
-  root: {
-    fontSize: "calc(10px + 0.3vw)",
-    fontWeight: "500",
-    "@media (max-width: 780px)": {
-      lineHeight: 1,
-    },
+    letterSpacing: "0.005rem",
+    lineHeight: 1.25,
   },
 })(Typography);
 
 const LgTypography = withStyles({
   root: {
-    fontSize: "calc(14px + 0.3vw)",
-    fontWeight: "500",
-    "@media (max-width: 780px)": {
-      lineHeight: 1.25,
-    },
+    fontSize: "calc(15px + 0.5vw)",
+    fontWeight: "600",
+    letterSpacing: "0.02rem",
+    lineHeight: 1.25,
   },
 })(Typography);
 
 export default function Lists(props) {
-  const {
-    crtJob,
-    jobTitle,
-    companyName,
-    appliedDate,
-    source,
-    jobState,
-    jobLevel,
-    handleClickOpen,
-  } = props;
+  const { crtJob, handleClickOpen } = props;
   //props for makeStyles
   const styleProps = {
     badageColor:
-      jobLevel === "Junior"
+      crtJob.level === "Junior"
         ? "#4caf50"
-        : jobLevel === "Middle"
+        : crtJob.level === "Middle"
         ? "#ffc107"
-        : jobLevel === "Senior"
+        : crtJob.level === "Senior"
         ? "#9e9e9e"
         : null,
     stateColor:
-      jobState === "Submit"
+      crtJob.state === "Submit"
         ? "#00BCD4"
-        : jobState === "Interview"
+        : crtJob.state === "Interview"
         ? "#8BC34A"
-        : jobState === "Test"
+        : crtJob.state === "Test"
         ? "#FFC107"
         : null,
   };
@@ -138,26 +133,32 @@ export default function Lists(props) {
       <Paper className={classes.paper} elevation={5}>
         <div className={classes.listLeft}>
           <Badge
-            badgeContent={jobLevel}
+            badgeContent={crtJob.level}
             classes={{
               badge: classes.badge,
             }}
           >
-            <LgTypography>{jobTitle}</LgTypography>
+            <LgTypography>{crtJob.title}</LgTypography>
           </Badge>
 
-          <SmTypography>{companyName}</SmTypography>
+          <SmTypography>{crtJob.company}</SmTypography>
         </div>
         <div className={classes.listMid}>
-          <MdTypography>{appliedDate}</MdTypography>
-          <LgTypography>{source}</LgTypography>
+          <SmTypography>{crtJob.appliedDate.slice(5, 10)}</SmTypography>
+          <LgTypography>{crtJob.source}</LgTypography>
         </div>
         <div className={classes.listState}>
-          <LgTypography className={classes.state}>{jobState}</LgTypography>
+          <div className={classes.stateBox}>
+            <LgTypography className={classes.state}>
+              {crtJob.state}
+            </LgTypography>
+          </div>
         </div>
         <div className={classes.listControl}>
-          <button>x</button>
-          <button onClick={() => handleClickOpen(crtJob)}>Edit</button>
+          <SettingsIcon
+            className={classes.icon}
+            onClick={() => handleClickOpen(crtJob)}
+          />
         </div>
       </Paper>
     </div>

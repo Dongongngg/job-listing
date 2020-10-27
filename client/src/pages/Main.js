@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   paper: {
     margin: "10% 0",
     backgroundColor: "#F5F5F5",
-    borderRadius: "20px",
+    borderRadius: "1rem",
     minHeight: "80vh",
   },
 });
@@ -82,12 +82,6 @@ export default function Main() {
               <Lists
                 key={i}
                 crtJob={jobList}
-                jobTitle={jobList.title}
-                jobLevel={jobList.level}
-                companyName={jobList.company}
-                appliedDate={jobList.appliedDate}
-                source={jobList.source}
-                jobState={jobList.state}
                 handleClickOpen={handleClickOpen}
               />
             ))
@@ -98,7 +92,6 @@ export default function Main() {
         openEdit={openEdit}
         handleClose={handleClose}
         crtJob={crtJob}
-        setCrtJob={setCrtJob}
         setUpdateSuccess={setUpdateSuccess}
       />
     </Grid>
