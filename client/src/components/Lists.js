@@ -15,7 +15,9 @@ const useStyles = makeStyles({
     },
   },
   paper: {
-    backgroundColor: "#01579B",
+    background: "rgb(2,0,36)",
+    background:
+      "linear-gradient(33deg, rgb(75 75 196) 20%, rgb(0 166 200) 90%)",
     height: "8vh",
     width: "100%",
     padding: "0.5rem",
@@ -74,8 +76,12 @@ const useStyles = makeStyles({
   },
   icon: {
     cursor: "pointer",
+    transition: "0.5s all",
     "@media (max-width: 780px)": {
       fontSize: "1rem",
+    },
+    "&:hover": {
+      transform: "rotate(90deg)",
     },
   },
   badge: {
@@ -106,7 +112,7 @@ const LgTypography = withStyles({
 })(Typography);
 
 export default function Lists(props) {
-  const { crtJob, handleClickOpen } = props;
+  const { crtJob, handleClickOpenEdit } = props;
   //props for makeStyles
   const styleProps = {
     badageColor:
@@ -157,7 +163,7 @@ export default function Lists(props) {
         <div className={classes.listControl}>
           <SettingsIcon
             className={classes.icon}
-            onClick={() => handleClickOpen(crtJob)}
+            onClick={() => handleClickOpenEdit(crtJob)}
           />
         </div>
       </Paper>

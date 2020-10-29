@@ -23,7 +23,14 @@ exports.getJobs = async (req, res, next) => {
 // @access  public
 exports.addJobs = async (req, res, next) => {
   try {
-    const job = await Jobs.create(req.body);
+    const job = await Jobs.create({
+      title: req.body.jobTitle,
+      company: req.body.companyName,
+      source: req.body.source,
+      level: req.body.jobLevel,
+      state: req.body.state,
+      appliedDate: req.body.appliedDate,
+    });
 
     return res.status(201).json({
       success: true,
@@ -61,7 +68,7 @@ exports.deleteJobs = async (req, res, next) => {
     await job.remove();
     return res.status(200).json({
       success: true,
-      data: "job removed",
+      data: "Job removed",
     });
   } catch (err) {
     return res.send(500).json({
@@ -92,7 +99,7 @@ exports.updateJobs = async (req, res, next) => {
     });
     return res.status(200).json({
       success: true,
-      data: "job updated",
+      data: "Job updated",
     });
   } catch (err) {
     return res.status(500).json({

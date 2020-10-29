@@ -100,9 +100,8 @@ const MyInput = withStyles({
 })(InputBase);
 
 export default function DialogEdit({
-  openEdit,
-  handleCloseEdit,
-  crtJob,
+  openCreate,
+  handleCloseCreate,
   setDialogSuccess,
 }) {
   const classes = useStyles();
@@ -114,7 +113,7 @@ export default function DialogEdit({
     ["source", "Source"],
   ];
 
-  const [updatedJob, setUpdatedJob] = useState({
+  const [newJob, setNewJob] = useState({
     jobTitle: "",
     jobLevel: "",
     companyName: "",
@@ -123,28 +122,17 @@ export default function DialogEdit({
     state: "",
   });
 
-  //copy crtJob value as default value for each input
-  useEffect(() => {
-    setUpdatedJob({
-      jobTitle: crtJob.title,
-      jobLevel: crtJob.level,
-      companyName: crtJob.company,
-      source: crtJob.source,
-      appliedDate: crtJob.appliedDate,
-      state: crtJob.state,
-    });
-  }, [crtJob]);
   //  handle input change
   const handleChange = (event) => {
-    setUpdatedJob({ ...updatedJob, [event.target.name]: event.target.value });
+    setNewJob({ ...newJob, [event.target.name]: event.target.value });
   };
   //  dialog submit btn
   const handleSubmit = async () => {
-    console.log(updatedJob);
-    let res = await jobApi.updateJobById(crtJob._id, updatedJob);
+    console.log(newJob);
+    let res = await jobApi.addJob(newJob);
     console.log(res);
     if (res.success) {
-      handleCloseEdit();
+      handleCloseCreate();
       setDialogSuccess(true);
     }
   };
@@ -154,13 +142,17 @@ export default function DialogEdit({
   };
 
   const handleDate = (date, event) => {
-    setUpdatedJob({ ...updatedJob, appliedDate: date });
+    setNewJob({ ...newJob, appliedDate: date });
   };
 
   return (
-    <Dialog open={openEdit} onClose={handleCloseEdit} className={classes.root}>
+    <Dialog
+      open={openCreate}
+      onClose={handleCloseCreate}
+      className={classes.root}
+    >
       <div className={classes.titleBox}>
-        <Typography className={classes.title}>Update Job</Typography>
+        <Typography className={classes.title}>Create Job</Typography>
       </div>
       <DialogContent className={classes.contentBox}>
         {inputs.map((e, i) => (
@@ -169,7 +161,7 @@ export default function DialogEdit({
             <MyInput
               name={e[0]}
               placeholder={e[1]}
-              value={updatedJob[e[0]] || ""}
+              value={newJob[e[0]] || ""}
               onChange={handleChange}
             ></MyInput>
           </div>
@@ -180,7 +172,7 @@ export default function DialogEdit({
             name="state"
             className={classes.input}
             input={<MySelect />}
-            value={updatedJob.state || ""}
+            value={newJob.state || ""}
             onChange={handleChange}
           >
             <MenuItem value={"Submit"}>Submit</MenuItem>
@@ -196,7 +188,7 @@ export default function DialogEdit({
               disableToolbar
               inputVariant="outlined"
               className={classes.datePicker}
-              value={updatedJob.appliedDate}
+              value={newJob.appliedDate}
               onChange={handleDate}
             />
           </MuiPickersUtilsProvider>

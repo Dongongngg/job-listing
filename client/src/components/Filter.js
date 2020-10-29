@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 
 const MyInput = withStyles({
   root: {
-    width: "50%",
+    width: "100%",
     borderRadius: "30px",
     boxShadow: "0px 4px 10px -3px rgba(0,0,0,0.3)",
     backgroundColor: "white",
