@@ -107,10 +107,8 @@ export default function DialogEdit({
   const classes = useStyles();
   //0:event.target.name 1:display text
   const inputs = [
-    ["jobTitle", "Job Title"],
-    ["jobLevel", "Job Level"],
-    ["companyName", "Company Name"],
-    ["source", "Source"],
+    ["companyName", "Company"],
+    ["source", "Applied from"],
   ];
 
   const [newJob, setNewJob] = useState({
@@ -121,6 +119,7 @@ export default function DialogEdit({
     appliedDate: new Date(),
     state: "",
   });
+  const [createFlag, setCreateFlag] = useState(false);
 
   //  handle input change
   const handleChange = (event) => {
@@ -128,12 +127,23 @@ export default function DialogEdit({
   };
   //  dialog submit btn
   const handleSubmit = async () => {
-    console.log(newJob);
-    let res = await jobApi.addJob(newJob);
-    console.log(res);
-    if (res.success) {
-      handleCloseCreate();
-      setDialogSuccess(true);
+    setCreateFlag(true);
+    if (newJob.jobTitle !== "") {
+      let res = await jobApi.addJob(newJob);
+      console.log(res);
+      if (res.success) {
+        handleCloseCreate();
+        setDialogSuccess(true);
+        setNewJob({
+          jobTitle: "",
+          jobLevel: "",
+          companyName: "",
+          source: "",
+          appliedDate: new Date(),
+          state: "",
+        });
+        setCreateFlag(false);
+      }
     }
   };
   // Dialog delete btn
@@ -155,6 +165,35 @@ export default function DialogEdit({
         <Typography className={classes.title}>Create Job</Typography>
       </div>
       <DialogContent className={classes.contentBox}>
+        <div className={classes.inputBox}>
+          <Typography className={classes.labels}>Level:</Typography>
+          <Select
+            name="jobLevel"
+            className={classes.input}
+            input={<MySelect />}
+            value={newJob.jobLevel || ""}
+            onChange={handleChange}
+          >
+            <MenuItem value={"Junior"}>Junior</MenuItem>
+            <MenuItem value={"Middle"}>Middle</MenuItem>
+            <MenuItem value={"Senior"}>Senior</MenuItem>
+          </Select>
+        </div>
+        <div className={classes.inputBox}>
+          <Typography
+            className={classes.labels}
+            style={{ color: newJob.jobTitle === "" && createFlag && "red" }}
+          >
+            *Title:
+          </Typography>
+          <MyInput
+            autoFocus={true}
+            name="jobTitle"
+            placeholder="jobTitle"
+            value={newJob.jobTitle || ""}
+            onChange={handleChange}
+          ></MyInput>
+        </div>
         {inputs.map((e, i) => (
           <div className={classes.inputBox} key={i}>
             <Typography className={classes.labels}>{e[1]}:</Typography>
@@ -166,6 +205,7 @@ export default function DialogEdit({
             ></MyInput>
           </div>
         ))}
+
         <div className={classes.inputBox}>
           <Typography className={classes.labels}>State:</Typography>
           <Select
@@ -181,7 +221,7 @@ export default function DialogEdit({
           </Select>
         </div>
         <div className={classes.inputBox}>
-          <Typography className={classes.labels}>Applied Date:</Typography>
+          <Typography className={classes.labels}>Applied date:</Typography>
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <DatePicker
               autoOk

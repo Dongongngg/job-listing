@@ -108,8 +108,6 @@ export default function DialogEdit({
   const classes = useStyles();
   //0:event.target.name 1:display text
   const inputs = [
-    ["jobTitle", "Job Title"],
-    ["jobLevel", "Job Level"],
     ["companyName", "Company Name"],
     ["source", "Source"],
   ];
@@ -122,6 +120,7 @@ export default function DialogEdit({
     appliedDate: new Date(),
     state: "",
   });
+  const [updatedJobFlag, setUpdatedJobFlag] = useState(false);
 
   //copy crtJob value as default value for each input
   useEffect(() => {
@@ -140,12 +139,15 @@ export default function DialogEdit({
   };
   //  dialog submit btn
   const handleSubmit = async () => {
-    console.log(updatedJob);
-    let res = await jobApi.updateJobById(crtJob._id, updatedJob);
-    console.log(res);
-    if (res.success) {
-      handleCloseEdit();
-      setDialogSuccess(true);
+    setUpdatedJobFlag(true);
+    if (updatedJob.jobTitle !== "") {
+      let res = await jobApi.updateJobById(crtJob._id, updatedJob);
+      console.log(res);
+      if (res.success) {
+        handleCloseEdit();
+        setDialogSuccess(true);
+        setUpdatedJobFlag(false);
+      }
     }
   };
   // Dialog delete btn
@@ -163,6 +165,36 @@ export default function DialogEdit({
         <Typography className={classes.title}>Update Job</Typography>
       </div>
       <DialogContent className={classes.contentBox}>
+        <div className={classes.inputBox}>
+          <Typography className={classes.labels}>Level:</Typography>
+          <Select
+            name="jobLevel"
+            className={classes.input}
+            input={<MySelect />}
+            value={updatedJob.jobLevel || ""}
+            onChange={handleChange}
+          >
+            <MenuItem value={"Junior"}>Junior</MenuItem>
+            <MenuItem value={"Middle"}>Middle</MenuItem>
+            <MenuItem value={"Senior"}>Senior</MenuItem>
+          </Select>
+        </div>
+        <div className={classes.inputBox}>
+          <Typography
+            className={classes.labels}
+            style={{
+              color: updatedJob.jobTitle === "" && updatedJobFlag && "red",
+            }}
+          >
+            *Title:
+          </Typography>
+          <MyInput
+            name="jobTitle"
+            placeholder="jobTitle"
+            value={updatedJob.jobTitle || ""}
+            onChange={handleChange}
+          ></MyInput>
+        </div>
         {inputs.map((e, i) => (
           <div className={classes.inputBox} key={i}>
             <Typography className={classes.labels}>{e[1]}:</Typography>

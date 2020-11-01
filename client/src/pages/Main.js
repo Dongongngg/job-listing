@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles, Typography, Paper, Grid } from "@material-ui/core/";
+import {
+  makeStyles,
+  Typography,
+  Paper,
+  Grid,
+  Divider,
+} from "@material-ui/core/";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
 //components
 import Header from "../components/Header";
@@ -13,27 +19,38 @@ import * as jobApi from "../api/jobs";
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: "#a5e1ff",
+    backgroundColor: "#BFE1F1",
     minHeight: "100vh",
   },
   paper: {
-    margin: "10% 0",
+    margin: "5vh 0",
+    "@media (max-width: 780px)": {
+      margin: "5vh 0",
+    },
     backgroundColor: "#F5F5F5",
     borderRadius: "1rem",
     minHeight: "80vh",
   },
   filterBox: {
     display: "flex",
-    alignItems: "center",
     justifyContent: "space-evenly",
+    padding: "2rem",
+    "@media (max-width: 780px)": {
+      padding: "1rem",
+    },
   },
   addIcon: {
     color: "#01579B",
-    fontSize: "calc(2rem + 2vw) ",
     cursor: "pointer",
     transition: "all 0.5s",
     "&:hover": {
       transform: "rotate(90deg)",
+    },
+    height: "5vh",
+    width: "5vh",
+    "@media (max-width: 780px)": {
+      height: "4vh",
+      width: "4vh",
     },
   },
 });
@@ -49,10 +66,18 @@ const Loading = ({ alert }) => {
 export default function Main() {
   const classes = useStyles();
   const [jobLists, setJobLists] = useState([]);
+  //  Filter lists
+  const [filter, setFilter] = useState("");
+  const [filteredJobLists, setFilteredJobLists] = useState([]);
+  const [clearFlag, setClearFlag] = useState(false);
+  //  Dialog open
   const [openEdit, setOpenEdit] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
+  // Current list
   const [crtJob, setCrtJob] = useState({});
+  // Dialog operation success flag
   const [dialogSuccess, setDialogSuccess] = useState(false);
+  // Connection failed
   const [networkError, setNetworkError] = useState(false);
   //  Load job data when mounted
   useEffect(() => {
@@ -60,13 +85,33 @@ export default function Main() {
       let res = await jobApi.getAllJobs();
       if (!res.status) {
         setJobLists(res);
+        setFilteredJobLists(res);
       } else {
         setNetworkError(true);
       }
     };
     getJobLists();
   }, []);
+  //  Set filter results as filter input changes
+  useEffect(() => {
+    if (filter === "") {
+      setFilteredJobLists(jobLists);
+    } else {
+      let filterResults = jobLists.filter((e) =>
+        e.title.toLowerCase().includes(filter.toLowerCase())
+      );
+      setFilteredJobLists(filterResults);
+    }
+  }, [filter, jobLists]);
 
+  const handleClearFilter = () => {
+    setFilter("");
+  };
+
+  //  handle filter input
+  const handleFilterInput = (event) => {
+    setFilter(event.target.value);
+  };
   //  Edit dialog open/close
   const handleClickOpenEdit = (job) => {
     setOpenEdit(true);
@@ -99,30 +144,31 @@ export default function Main() {
   }, [dialogSuccess]);
 
   return (
-    <Grid
-      container
-      direction="row"
-      justify="center"
-      alignItems="center"
-      className={classes.root}
-    >
+    <Grid container direction="row" justify="center" className={classes.root}>
       <Grid item xs={10} md={8} lg={5}>
         <Paper className={classes.paper} elevation={10}>
           <Header count={jobLists.length} />
           <div className={classes.filterBox}>
-            <Filter />
+            <Filter
+              input={filter}
+              handleInput={handleFilterInput}
+              handleClear={handleClearFilter}
+            />
             <AddCircleIcon
               className={classes.addIcon}
               onClick={handleClickOpenCreate}
             />
           </div>
+          <Divider variant="middle" />
 
           {jobLists.length === 0 ? (
-            <Loading alert="Loading..." />
+            <Loading alert="Loading" />
           ) : networkError ? (
             <Loading alert="Connection error" />
+          ) : filteredJobLists.length === 0 ? (
+            <Loading alert="No results" />
           ) : (
-            jobLists.map((jobList, i) => (
+            filteredJobLists.map((jobList, i) => (
               <Lists
                 key={i}
                 crtJob={jobList}

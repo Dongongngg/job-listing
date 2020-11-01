@@ -26,13 +26,13 @@ const Header = ({ count }) => {
     <div className={classes.root}>
       <div>
         <StyledTypography component="h3">Welcome</StyledTypography>
-        <StyledTypography component="h3" style={{ color: "blue" }}>
+        <StyledTypography component="h3" style={{ color: "rgb(75 75 196)" }}>
           James
         </StyledTypography>
       </div>
       <div>
         <StyledTypography component="h3">You have</StyledTypography>
-        <StyledTypography component="h3" style={{ color: "blue" }}>
+        <StyledTypography component="h3" style={{ color: "rgb(0 166 200)" }}>
           {count}
         </StyledTypography>
         <StyledTypography component="h3">applications</StyledTypography>
