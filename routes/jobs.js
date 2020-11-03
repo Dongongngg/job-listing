@@ -7,8 +7,10 @@ const {
   deleteJobs,
 } = require("../controllers/jobs");
 
-router.route("/").get(getJobs).post(addJobs);
+const { auth } = require("../routes/verifyToken");
 
-router.route("/:id").put(updateJobs).delete(deleteJobs);
+router.route("/").get([auth], getJobs).post([auth], addJobs);
+
+router.route("/:id").put([auth], updateJobs).delete([auth], deleteJobs);
 
 module.exports = router;

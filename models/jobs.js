@@ -27,6 +27,10 @@ const JobSchema = new monogoos.Schema({
     type: Date,
     default: Date.now,
   },
+  user: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = monogoos.model("Jobs", JobSchema);

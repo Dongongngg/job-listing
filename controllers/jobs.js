@@ -1,11 +1,13 @@
 const Jobs = require("../models/jobs");
 
-// @desc    get all jobs
+// @desc    get all jobs for current login user
 // @route   GET /api/jobs
-// @access  public
+// @access  private
 exports.getJobs = async (req, res, next) => {
   try {
-    const jobs = await Jobs.find();
+    const jobs = await Jobs.find({
+      user: req.loginUser._id,
+    });
     return res.status(200).json({
       success: true,
       count: jobs.length,
@@ -18,9 +20,9 @@ exports.getJobs = async (req, res, next) => {
     });
   }
 };
-// @desc    add jobs
+// @desc    add jobs for current login user
 // @route   POST /api/jobs
-// @access  public
+// @access  private
 exports.addJobs = async (req, res, next) => {
   try {
     const job = await Jobs.create({
@@ -30,6 +32,7 @@ exports.addJobs = async (req, res, next) => {
       level: req.body.jobLevel,
       state: req.body.state,
       appliedDate: req.body.appliedDate,
+      user: req.loginUser._id,
     });
 
     return res.status(201).json({
@@ -52,9 +55,9 @@ exports.addJobs = async (req, res, next) => {
     }
   }
 };
-// @desc    delete all jobs
+// @desc    delete jobs
 // @route   DELETE /api/jobs/:id
-// @access  public
+// @access  private
 exports.deleteJobs = async (req, res, next) => {
   try {
     const job = await Jobs.findById(req.params.id);
@@ -77,9 +80,9 @@ exports.deleteJobs = async (req, res, next) => {
     });
   }
 };
-// @desc    update all jobs
+// @desc    update by job's id
 // @route   PUT /api/jobs/:id
-// @access  public
+// @access  private
 exports.updateJobs = async (req, res, next) => {
   try {
     const job = await Jobs.findById(req.params.id);
