@@ -10,7 +10,7 @@ exports.addUsers = async (req, res) => {
   // Check register input
   const { error } = registerValidation(req.body);
   if (error) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       error: error.details[0].message,
     });
@@ -18,7 +18,7 @@ exports.addUsers = async (req, res) => {
   // Check if user already exist
   const exist = await Users.findOne({ name: req.body.username });
   if (exist) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       error: "User exist.",
     });
@@ -49,10 +49,10 @@ exports.addUsers = async (req, res) => {
 // @route   POST /api/users/login
 // @access  public
 exports.loginUser = async (req, res) => {
-  // Check register input
+  // Check login input
   const { error } = loginValidation(req.body);
   if (error) {
-    return res.status(400).json({
+    return res.status(422).send({
       success: false,
       error: error.details[0].message,
     });
@@ -62,7 +62,7 @@ exports.loginUser = async (req, res) => {
     // Check if user exist
     const loginUser = await Users.findOne({ name: req.body.username });
     if (!loginUser) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         error: "Name not exist.",
       });
@@ -73,20 +73,21 @@ exports.loginUser = async (req, res) => {
       loginUser.password
     );
     if (!validPass) {
-      return res.status(400).json({
+      return res.status(401).json({
         success: false,
         error: "Password is wrong.",
       });
     } else {
-      const token = jwt.sign({ _id: loginUser._id }, process.env.TOKEN_SECRET);
+      const token = jwt.sign({ _id: loginUser._id }, process.env.TOKEN_SECRET, {
+        expiresIn: 3600,
+      });
 
-      return res
-        .header("auth-token", token)
-        .status(201)
-        .json({
-          success: true,
-          error: `log in with id: ${loginUser._id}`,
-        });
+      return res.header("auth-token", token).status(200).json({
+        success: true,
+        id: loginUser._id,
+        username: loginUser.name,
+        accessToken: token,
+      });
     }
   } catch (err) {
     return res.status(500).json({

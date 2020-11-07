@@ -7,10 +7,8 @@ import {
   InputBase,
   Button,
   Typography,
-  FormControl,
   Select,
   MenuItem,
-  InputLabel,
 } from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
@@ -121,6 +119,8 @@ export default function DialogEdit({
     state: "",
   });
   const [updatedJobFlag, setUpdatedJobFlag] = useState(false);
+  const [isLogIn, setIsLogIn] = useState(true);
+  const [alert, setAlert] = useState("");
 
   //copy crtJob value as default value for each input
   useEffect(() => {
@@ -147,13 +147,19 @@ export default function DialogEdit({
         handleCloseEdit();
         setDialogSuccess(true);
         setUpdatedJobFlag(false);
+      } else {
+        setIsLogIn(false);
       }
     }
   };
+
+  useEffect(() => {
+    if (!isLogIn) {
+      setAlert("Please login again.");
+    }
+  }, [isLogIn]);
   // Dialog delete btn
-  const handleDelete = async () => {
-    let res = await jobApi;
-  };
+  const handleDelete = async () => {};
 
   const handleDate = (date, event) => {
     setUpdatedJob({ ...updatedJob, appliedDate: date });

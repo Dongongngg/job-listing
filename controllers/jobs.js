@@ -35,15 +35,16 @@ exports.addJobs = async (req, res, next) => {
       user: req.loginUser._id,
     });
 
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
       data: job,
     });
   } catch (err) {
+    //  if no title
     if (err.name === "ValidationError") {
       const messages = Object.values(err.errors).map((e) => e.message);
 
-      res.status(400).json({
+      res.status(422).json({
         success: false,
         error: messages,
       });
@@ -63,7 +64,7 @@ exports.deleteJobs = async (req, res, next) => {
     const job = await Jobs.findById(req.params.id);
 
     if (!job) {
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
         error: "No job found",
       });
@@ -87,7 +88,7 @@ exports.updateJobs = async (req, res, next) => {
   try {
     const job = await Jobs.findById(req.params.id);
     if (!job) {
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
         error: "No job found",
       });

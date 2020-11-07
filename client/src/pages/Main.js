@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   makeStyles,
   Typography,
@@ -59,6 +60,7 @@ const Loading = ({ alert }) => {
   return (
     <Typography style={{ textAlign: "center", padding: "1rem" }}>
       {alert}
+      {alert === "Please login" ? <Link to="/login"> back</Link> : null}
     </Typography>
   );
 };
@@ -69,7 +71,6 @@ export default function Main() {
   //  Filter lists
   const [filter, setFilter] = useState("");
   const [filteredJobLists, setFilteredJobLists] = useState([]);
-  const [clearFlag, setClearFlag] = useState(false);
   //  Dialog open
   const [openEdit, setOpenEdit] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
@@ -78,16 +79,17 @@ export default function Main() {
   // Dialog operation success flag
   const [dialogSuccess, setDialogSuccess] = useState(false);
   // Connection failed
-  const [networkError, setNetworkError] = useState(false);
-  //  Load job data when mounted
+  const [LoginError, setLoginError] = useState(false);
+  //  Load job data when page mounted
   useEffect(() => {
     const getJobLists = async () => {
       let res = await jobApi.getAllJobs();
-      if (!res.status) {
-        setJobLists(res);
-        setFilteredJobLists(res);
-      } else {
-        setNetworkError(true);
+      console.log(res);
+      if (res.success) {
+        setJobLists(res.data);
+        setFilteredJobLists(res.data);
+      } else if (res === "Invalid Token" || res === "Access Denied") {
+        setLoginError(true);
       }
     };
     getJobLists();
@@ -108,7 +110,7 @@ export default function Main() {
     setFilter("");
   };
 
-  //  handle filter input
+  //  Handle filter input
   const handleFilterInput = (event) => {
     setFilter(event.target.value);
   };
@@ -133,7 +135,7 @@ export default function Main() {
   useEffect(() => {
     const getJobLists = async () => {
       let res = await jobApi.getAllJobs();
-      setJobLists(res);
+      setJobLists(res.data);
     };
     if (dialogSuccess) {
       getJobLists();
@@ -146,7 +148,7 @@ export default function Main() {
   return (
     <Grid container direction="row" justify="center" className={classes.root}>
       <Grid item xs={10} md={8} lg={5}>
-        <Paper className={classes.paper} elevation={10}>
+        <Paper className={classes.paper} elevation={5}>
           <Header count={jobLists.length} />
           <div className={classes.filterBox}>
             <Filter
@@ -161,12 +163,10 @@ export default function Main() {
           </div>
           <Divider variant="middle" />
 
-          {jobLists.length === 0 ? (
-            <Loading alert="Loading" />
-          ) : networkError ? (
-            <Loading alert="Connection error" />
+          {LoginError ? (
+            <Loading alert="Please login" />
           ) : filteredJobLists.length === 0 ? (
-            <Loading alert="No results" />
+            <Loading alert="Loading..." />
           ) : (
             filteredJobLists.map((jobList, i) => (
               <Lists

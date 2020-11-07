@@ -7,10 +7,8 @@ import {
   InputBase,
   Button,
   Typography,
-  FormControl,
   Select,
   MenuItem,
-  InputLabel,
 } from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
