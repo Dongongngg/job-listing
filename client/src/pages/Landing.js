@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   InputBase,
   Typography,
@@ -12,8 +12,9 @@ import {
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 // API
 import { signIn } from "../api/users";
-//
+//components
 import JoblistSVG from "../components/JoblistSVG";
+import DialogSignUp from "../components/DialogSignUp";
 const MyInput = withStyles({
   root: {
     width: "100%",
@@ -111,17 +112,23 @@ const useStyle = makeStyles({
 });
 export default function Landing(props) {
   const classes = useStyle();
+  //  input for sign in
   const [input, setInput] = useState({
     username: "",
     password: "",
   });
   const [signInFlag, setSignInFlag] = useState(false);
   const [success, setSuccess] = useState();
+  // loading sign for sign in btn
   const [loading, setLoading] = useState(false);
+  // sign up
+  const [openSignUp, setOpenSignUp] = useState(false);
+  const [dialogSuccess, setDialogSuccess] = useState(false);
 
   const handleInput = (event) => {
     setInput({ ...input, [event.target.name]: event.target.value });
   };
+  //  handle sign in btn onClick
   const handleSignIn = async () => {
     if (input.username !== "" && input.password !== "") {
       setLoading(true);
@@ -147,6 +154,18 @@ export default function Landing(props) {
       setSignInFlag(true);
     }
   };
+
+  // handle sign up dialog
+  const handleOpenSignUp = () => {
+    setOpenSignUp(true);
+  };
+  const handleCloseSignUp = () => {
+    setOpenSignUp(false);
+  };
+  useEffect(() => {
+    handleCloseSignUp();
+  }, [dialogSuccess]);
+
   return (
     <Grid
       container
@@ -236,11 +255,20 @@ export default function Landing(props) {
                   )}
                 </div>
 
-                <Button variant="outlined" color="primary">
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleOpenSignUp}
+                >
                   Sign Up
                 </Button>
               </div>
             </Paper>
+            <DialogSignUp
+              openSignUp={openSignUp}
+              handleCloseSignUp={handleCloseSignUp}
+              setDialogSuccess={setDialogSuccess}
+            />
           </Grid>
         </Grid>
       </Grid>

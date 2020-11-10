@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const signIn = async (data) => {
   try {
-    const res = await axios.post("/api/users/login/", data);
+    const res = await axios.post("/api/users/signin/", data);
 
     if (res.data.accessToken) {
       localStorage.setItem("user", JSON.stringify(res.data));
@@ -19,7 +19,7 @@ export const signOut = async (data) => {
 
 export const signUp = async (data) => {
   try {
-    const res = await axios.post("/api/users/new/", data);
+    const res = await axios.post("/api/users/signup/", data);
     return res.data;
   } catch (err) {
     return err.response.data;

@@ -7,7 +7,7 @@ const {
   deleteJobs,
 } = require("../controllers/jobs");
 
-const { auth } = require("../routes/verifyToken");
+const { auth } = require("../middlewares/verifyToken");
 
 router.route("/").get([auth], getJobs).post([auth], addJobs);
 

@@ -1,12 +1,15 @@
 const Users = require("../models/users");
-const { registerValidation, loginValidation } = require("../models/validation");
+const {
+  registerValidation,
+  loginValidation,
+} = require("../middlewares/validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // @desc    add users
 // @route   POST /api/users/new
 // @access  public
-exports.addUsers = async (req, res) => {
+exports.addUser = async (req, res) => {
   // Check register input
   const { error } = registerValidation(req.body);
   if (error) {
@@ -35,7 +38,7 @@ exports.addUsers = async (req, res) => {
     });
     return res.status(201).json({
       success: true,
-      data: { user: user._id },
+      data: { username: user._id },
     });
   } catch (err) {
     return res.status(500).json({
