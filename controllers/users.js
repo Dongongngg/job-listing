@@ -1,5 +1,5 @@
 const Users = require("../models/users");
-const { registerValidation, loginValidation } = require("../validation");
+const { registerValidation, loginValidation } = require("../models/validation");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 

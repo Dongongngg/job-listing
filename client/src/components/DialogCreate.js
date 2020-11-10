@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
   Dialog,
@@ -53,21 +54,33 @@ const useStyles = makeStyles({
       "& .MuiOutlinedInput-input": { padding: "0.5rem 0.5rem 0.5rem 1rem" },
     },
   },
-  delete: {
-    fontSize: "calc(12px + 0.3vw)",
+  cancelBtn: {
     color: "#717171",
+    backgroundColor: "#e0e0e0",
+    fontSize: "0.75rem",
+    borderRadius: "1rem",
+    "&:hover": {
+      backgroundColor: "#d0d0d0",
+    },
   },
-  submit: {
+  submitBtn: {
     fontSize: "0.75rem",
     backgroundColor: "#01579B",
     color: "#fff",
     borderRadius: "1rem",
     "&:hover": {
-      backgroundColor: "#01579B",
+      backgroundColor: "#01476d",
     },
   },
 });
-
+const Alert = ({ alert }) => {
+  return (
+    <Typography style={{ textAlign: "center" }}>
+      {alert}
+      {alert === "Please login" ? <Link to="/"> back</Link> : null}
+    </Typography>
+  );
+};
 const MySelect = withStyles({
   root: { width: "100%", color: "#717171" },
   input: {
@@ -118,7 +131,8 @@ export default function DialogEdit({
     state: "",
   });
   const [createFlag, setCreateFlag] = useState(false);
-
+  // Connection failed
+  const [loginError, setLoginError] = useState(false);
   //  handle input change
   const handleChange = (event) => {
     setNewJob({ ...newJob, [event.target.name]: event.target.value });
@@ -128,7 +142,7 @@ export default function DialogEdit({
     setCreateFlag(true);
     if (newJob.jobTitle !== "") {
       let res = await jobApi.addJob(newJob);
-      console.log(res);
+
       if (res.success) {
         handleCloseCreate();
         setDialogSuccess(true);
@@ -141,12 +155,14 @@ export default function DialogEdit({
           state: "",
         });
         setCreateFlag(false);
+        console.log(res);
+      } else if (res === "Invalid Token" || res === "Access Denied") {
+        setLoginError(true);
+        console.log(res);
+      } else {
+        console.log(res);
       }
     }
-  };
-  // Dialog delete btn
-  const handleDelete = async () => {
-    let res = await jobApi;
   };
 
   const handleDate = (date, event) => {
@@ -232,12 +248,20 @@ export default function DialogEdit({
           </MuiPickersUtilsProvider>
         </div>
       </DialogContent>
+      {loginError ? <Alert alert="Please login" /> : null}
       <DialogActions className={classes.actionBox}>
-        <Typography className={classes.delete}>Delete</Typography>
         <Button
           variant="contained"
           size="small"
-          className={classes.submit}
+          className={classes.cancelBtn}
+          onClick={handleCloseCreate}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          className={classes.submitBtn}
           onClick={handleSubmit}
         >
           Submit

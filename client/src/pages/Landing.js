@@ -54,6 +54,12 @@ const useStyle = makeStyles({
     lineHeight: "normal",
   },
   intro: { padding: "3rem 1rem 0 1rem", fontSize: "3rem" },
+  btnBox: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    marginTop: "1rem",
+  },
   login: {
     borderRadius: "1rem",
     padding: "1rem",
@@ -109,7 +115,7 @@ export default function Landing(props) {
     username: "",
     password: "",
   });
-  const [signInError, setSignInError] = useState();
+  const [signInFlag, setSignInFlag] = useState(false);
   const [success, setSuccess] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -117,23 +123,29 @@ export default function Landing(props) {
     setInput({ ...input, [event.target.name]: event.target.value });
   };
   const handleSignIn = async () => {
-    setLoading(true);
-    let res = await signIn(input);
-    if (res.success) {
-      setTimeout(() => {
-        setLoading(false);
-        setSuccess(true);
-      }, 2000);
-      setTimeout(() => {
-        props.history.push("/app");
-      }, 4000);
+    if (input.username !== "" && input.password !== "") {
+      setLoading(true);
+      let res = await signIn(input);
+      if (res.success) {
+        setTimeout(() => {
+          setLoading(false);
+          setSignInFlag(true);
+          setSuccess(true);
+        }, 2000);
+        setTimeout(() => {
+          props.history.push("/app");
+        }, 4000);
+      } else {
+        setTimeout(() => {
+          setLoading(false);
+          setSignInFlag(true);
+          setSuccess(false);
+        }, 2000);
+      }
+      console.log(res);
     } else {
-      setTimeout(() => {
-        setSignInError("Wrong password.");
-        setLoading(false);
-      }, 2000);
+      setSignInFlag(true);
     }
-    console.log(res);
   };
   return (
     <Grid
@@ -157,15 +169,36 @@ export default function Landing(props) {
             <Divider variant="middle" style={{ margin: "0 4rem" }} />
             <Paper elevation={3} className={classes.login}>
               <div className={classes.inputBox}>
-                <Typography className={classes.labels}>Username:</Typography>
+                <Typography
+                  className={classes.labels}
+                  style={{
+                    color:
+                      (!success || input.username === "") &&
+                      signInFlag &&
+                      "red",
+                  }}
+                >
+                  Username:
+                </Typography>
                 <MyInput
                   name="username"
                   value={input.username}
                   onChange={handleInput}
+                  autoComplete="off"
                 ></MyInput>
               </div>
               <div className={classes.inputBox}>
-                <Typography className={classes.labels}>Password:</Typography>
+                <Typography
+                  className={classes.labels}
+                  style={{
+                    color:
+                      (!success || input.password === "") &&
+                      signInFlag &&
+                      "red",
+                  }}
+                >
+                  Password:
+                </Typography>
                 <MyInput
                   name="password"
                   value={input.password}
@@ -174,49 +207,38 @@ export default function Landing(props) {
                 ></MyInput>
               </div>
               <div className={classes.btnBox}>
-                <Typography className={classes.errorSign}>
-                  {signInError}
-                </Typography>
                 <div
                   style={{
+                    position: "relative",
                     display: "flex",
-                    justifyContent: "center",
-                    width: "100%",
+                    alignItems: "center",
                   }}
                 >
-                  <div
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
+                  <Button
+                    variant="contained"
+                    disabled={loading}
+                    onClick={handleSignIn}
+                    className={
+                      success
+                        ? classes.buttonSuccess
+                        : success === false
+                        ? classes.buttonFailed
+                        : classes.button
+                    }
                   >
-                    <Button
-                      variant="contained"
-                      disabled={loading}
-                      onClick={handleSignIn}
-                      className={
-                        success
-                          ? classes.buttonSuccess
-                          : signInError
-                          ? classes.buttonFailed
-                          : classes.button
-                      }
-                    >
-                      {!success ? "Sign In" : "Success"}
-                    </Button>
-                    {loading && (
-                      <CircularProgress
-                        size={24}
-                        className={classes.buttonProgress}
-                      />
-                    )}
-                  </div>
-
-                  <Button variant="outlined" color="primary">
-                    Sign Up
+                    {!success ? "Sign In" : "Success"}
                   </Button>
+                  {loading && (
+                    <CircularProgress
+                      size={24}
+                      className={classes.buttonProgress}
+                    />
+                  )}
                 </div>
+
+                <Button variant="outlined" color="primary">
+                  Sign Up
+                </Button>
               </div>
             </Paper>
           </Grid>

@@ -15,7 +15,6 @@ const useStyles = makeStyles({
     },
   },
   paper: {
-    background: "rgb(2,0,36)",
     background:
       "linear-gradient(33deg, rgb(75 75 196) 20%, rgb(0 166 200) 90%)",
     height: "8vh",

@@ -6,7 +6,11 @@ export const getAllJobs = async () => {
     const res = await axios.get("/api/jobs/", {
       headers: authHeader(),
     });
-    return res.data;
+    if (res.status >= 200 && res.status < 300) {
+      return res.data;
+    } else {
+      return "error";
+    }
   } catch (err) {
     return err.response.data;
   }

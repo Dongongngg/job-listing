@@ -56,11 +56,13 @@ const useStyles = makeStyles({
   },
 });
 
-const Loading = ({ alert }) => {
+const Alert = ({ alert }) => {
   return (
-    <Typography style={{ textAlign: "center", padding: "1rem" }}>
+    <Typography
+      style={{ textAlign: "center", paddingTop: "10rem", fontSize: "1.5rem" }}
+    >
       {alert}
-      {alert === "Please login" ? <Link to="/login"> back</Link> : null}
+      {alert === "Please login" ? <Link to="/"> back</Link> : null}
     </Typography>
   );
 };
@@ -68,6 +70,7 @@ const Loading = ({ alert }) => {
 export default function Main() {
   const classes = useStyles();
   const [jobLists, setJobLists] = useState([]);
+  const [loading, setLoading] = useState(true);
   //  Filter lists
   const [filter, setFilter] = useState("");
   const [filteredJobLists, setFilteredJobLists] = useState([]);
@@ -79,7 +82,7 @@ export default function Main() {
   // Dialog operation success flag
   const [dialogSuccess, setDialogSuccess] = useState(false);
   // Connection failed
-  const [LoginError, setLoginError] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   //  Load job data when page mounted
   useEffect(() => {
     const getJobLists = async () => {
@@ -88,6 +91,7 @@ export default function Main() {
       if (res.success) {
         setJobLists(res.data);
         setFilteredJobLists(res.data);
+        setLoading(false);
       } else if (res === "Invalid Token" || res === "Access Denied") {
         setLoginError(true);
       }
@@ -163,10 +167,10 @@ export default function Main() {
           </div>
           <Divider variant="middle" />
 
-          {LoginError ? (
-            <Loading alert="Please login" />
-          ) : filteredJobLists.length === 0 ? (
-            <Loading alert="Loading..." />
+          {loginError ? (
+            <Alert alert="Please login" />
+          ) : loading ? (
+            <Alert alert="Loading..." />
           ) : (
             filteredJobLists.map((jobList, i) => (
               <Lists
