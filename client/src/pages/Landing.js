@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core/";
 
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import TouchAppIcon from "@material-ui/icons/TouchApp";
 // API
 import { signIn } from "../api/users";
 //components
@@ -35,6 +36,9 @@ const useStyle = makeStyles({
     height: "100vh",
     backgroundColor: "#eee",
   },
+  headerBox: { position: "absolute", left: "1rem", top: "1rem" },
+  headerTitle: { fontSize: "2rem", lineHeight: "1" },
+
   svgBox: {
     height: "100%",
     display: "flex",
@@ -42,24 +46,35 @@ const useStyle = makeStyles({
     alignItems: "center",
     flexDirection: "column",
   },
+  arrow: {
+    flex: "0",
+    fontSize: "5rem",
+    paddingTop: "2rem",
+    color: "rgb(108, 99, 255)",
+    "@media (max-width: 780px)": {
+      flex: "none",
+    },
+  },
   loginBox: {
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
+    minHeight: "100vh",
+    position: "relative",
   },
   greeting: {
     fontSize: "2rem",
     textAlign: "center",
-    padding: "1rem 0",
-    lineHeight: "normal",
+    lineHeight: "1",
   },
-  intro: { padding: "3rem 1rem 0 1rem", fontSize: "3rem" },
+  divider: { margin: "2rem 4rem", padding: "1px" },
+  intro: { padding: "3rem 1rem 0 1rem", fontSize: "calc(1rem + 1.5vw)" },
   btnBox: {
     display: "flex",
     justifyContent: "center",
     width: "100%",
     marginTop: "1rem",
+    "& > button": {
+      borderRadius: "1rem",
+    },
   },
   login: {
     borderRadius: "1rem",
@@ -74,7 +89,14 @@ const useStyle = makeStyles({
     },
   },
   labels: { padding: "1rem 1rem 1rem 0" },
-
+  signinBtn: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    "& > button": {
+      borderRadius: "1rem",
+    },
+  },
   button: {
     marginRight: "1rem",
     backgroundColor: "rgb(108, 99, 255)",
@@ -109,6 +131,8 @@ const useStyle = makeStyles({
     marginLeft: -12,
   },
   errorSign: { padding: "1rem" },
+  footerBox: { position: "absolute", right: "1rem", bottom: "1rem" },
+  footer: { fontSize: "1rem", lineHeight: "1", display: "inline" },
 });
 export default function Landing(props) {
   const classes = useStyle();
@@ -165,6 +189,10 @@ export default function Landing(props) {
   useEffect(() => {
     handleCloseSignUp();
   }, [dialogSuccess]);
+  //  Scroll to id
+  const scrollTo = (props) => {
+    document.getElementById(props).scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <Grid
@@ -173,20 +201,27 @@ export default function Landing(props) {
       alignItems="center"
       className={classes.root}
     >
+      <div className={classes.headerBox}>
+        <Typography className={classes.headerTitle}>Job List</Typography>
+      </div>
       {/* SVG */}
       <Grid item md={7} xs={12} className={classes.svgBox}>
         <JoblistSVG />
         <Typography className={classes.intro}>
           Manage your job applications
         </Typography>
+        <TouchAppIcon
+          className={classes.arrow}
+          onClick={() => scrollTo("login")}
+        />
       </Grid>
       {/* Log in */}
       <Grid item md={5} xs={12} className={classes.loginBox}>
         <Grid container justify="center" alignItems="center">
-          <Grid item s={8} md={5} lg={5} style={{ margin: "2rem" }}>
+          <Grid item s={8} md={8} lg={6} style={{ margin: "2rem" }}>
             <Typography className={classes.greeting}>Welcome Back!</Typography>
-            <Divider variant="middle" style={{ margin: "0 4rem" }} />
-            <Paper elevation={3} className={classes.login}>
+            <Divider variant="middle" className={classes.divider} />
+            <Paper elevation={3} className={classes.login} id="login">
               <div className={classes.inputBox}>
                 <Typography
                   className={classes.labels}
@@ -194,7 +229,7 @@ export default function Landing(props) {
                     color:
                       (!success || input.username === "") &&
                       signInFlag &&
-                      "red",
+                      "#e91e63",
                   }}
                 >
                   Username:
@@ -213,7 +248,7 @@ export default function Landing(props) {
                     color:
                       (!success || input.password === "") &&
                       signInFlag &&
-                      "red",
+                      "#e91e63",
                   }}
                 >
                   Password:
@@ -226,13 +261,7 @@ export default function Landing(props) {
                 ></MyInput>
               </div>
               <div className={classes.btnBox}>
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
+                <div className={classes.signinBtn}>
                   <Button
                     variant="contained"
                     disabled={loading}
@@ -271,6 +300,18 @@ export default function Landing(props) {
             />
           </Grid>
         </Grid>
+        <div className={classes.footerBox}>
+          <Typography className={classes.footer}>Made By </Typography>
+          <Typography
+            className={classes.footer}
+            style={{ textDecoration: "underline", cursor: "pointer" }}
+            onClick={() => {
+              window.open("https://www.jingfudong.com");
+            }}
+          >
+            Jingfu
+          </Typography>
+        </div>
       </Grid>
     </Grid>
   );

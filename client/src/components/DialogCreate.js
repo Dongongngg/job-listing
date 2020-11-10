@@ -196,7 +196,7 @@ export default function DialogEdit({
         <div className={classes.inputBox}>
           <Typography
             className={classes.labels}
-            style={{ color: newJob.jobTitle === "" && createFlag && "red" }}
+            style={{ color: newJob.jobTitle === "" && createFlag && "#e91e63" }}
           >
             *Title:
           </Typography>

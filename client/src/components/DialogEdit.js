@@ -165,7 +165,19 @@ export default function DialogEdit({
   };
 
   // Dialog delete btn
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    let res = await jobApi.deleteJobById(crtJob._id);
+    if (res.success) {
+      handleCloseEdit();
+      setDialogSuccess(true);
+      setUpdatedJobFlag(false);
+      console.log(res);
+    } else if (res === "Invalid Token" || res === "Access Denied") {
+      setLoginError(true);
+    } else {
+      console.log(res);
+    }
+  };
 
   const handleDate = (date, event) => {
     setUpdatedJob({ ...updatedJob, appliedDate: date });
@@ -195,7 +207,7 @@ export default function DialogEdit({
           <Typography
             className={classes.labels}
             style={{
-              color: updatedJob.jobTitle === "" && updatedJobFlag && "red",
+              color: updatedJob.jobTitle === "" && updatedJobFlag && "#e91e63",
             }}
           >
             *Title:
@@ -248,7 +260,9 @@ export default function DialogEdit({
       </DialogContent>
       {loginError ? <Alert alert="Please login" /> : null}
       <DialogActions className={classes.actionBox}>
-        <Typography className={classes.deleteBtn}>Delete</Typography>
+        <Typography className={classes.deleteBtn} onClick={handleDelete}>
+          Delete
+        </Typography>
         <Button
           variant="contained"
           size="small"

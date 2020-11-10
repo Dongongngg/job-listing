@@ -38,7 +38,7 @@ exports.addUser = async (req, res) => {
     });
     return res.status(201).json({
       success: true,
-      data: { username: user._id },
+      data: { id: user._id },
     });
   } catch (err) {
     return res.status(500).json({

@@ -48,17 +48,17 @@ const useStyles = makeStyles({
   },
   submitBtn: {
     fontSize: "0.75rem",
-    backgroundColor: "#01579B",
+    backgroundColor: "rgb(108, 99, 255)",
     color: "#fff",
     borderRadius: "1rem",
     "&:hover": {
-      backgroundColor: "#01476d",
+      backgroundColor: "rgb(88, 79, 255)",
     },
   },
   signUpState: {
     textAlign: "center",
     fontWeight: "500",
-    fontSize: "calc(15px + 0.3vw)",
+    fontSize: "calc(10px + 0.3vw)",
     "@media (max-width: 780px)": {
       padding: "0.5rem 0 0.25rem 0.25rem",
     },
@@ -120,7 +120,7 @@ export default function DialogSignUp({
           }, 2000);
           console.log(res);
         } else {
-          console.log(res);
+          setSignUpState(res.error);
         }
       } else {
         setSignUpState("Confirming password failed");
@@ -140,7 +140,7 @@ export default function DialogSignUp({
           <Typography
             className={classes.labels}
             style={{
-              color: newUser.username === "" && signUpFlag && "red",
+              color: newUser.username === "" && signUpFlag && "#e91e63",
             }}
           >
             Username (6 or more characters):
@@ -157,7 +157,7 @@ export default function DialogSignUp({
           <Typography
             className={classes.labels}
             style={{
-              color: newUser.password === "" && signUpFlag && "red",
+              color: newUser.password === "" && signUpFlag && "#e91e63",
             }}
           >
             Password (6 or more characters):
@@ -178,7 +178,7 @@ export default function DialogSignUp({
                 (signUpState === "Confirming password failed" ||
                   newUser.rePassword === "") &&
                 signUpFlag &&
-                "red",
+                "#e91e63",
             }}
           >
             Confirm password:
@@ -205,6 +205,7 @@ export default function DialogSignUp({
           variant="contained"
           className={classes.submitBtn}
           onClick={handleSubmit}
+          color="primary"
         >
           Sign up
         </Button>
