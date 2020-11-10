@@ -1,9 +1,10 @@
 import axios from "axios";
 import authHeader from "./authHeader";
+import Api_prefix from "./url";
 
 export const getAllJobs = async () => {
   try {
-    const res = await axios.get("/api/jobs/", {
+    const res = await axios.get(Api_prefix + "/api/jobs/", {
       headers: authHeader(),
     });
     if (res.status >= 200 && res.status < 300) {
@@ -18,7 +19,7 @@ export const getAllJobs = async () => {
 
 export const updateJobById = async (id, data) => {
   try {
-    const res = await axios.put(`/api/jobs/${id}`, data, {
+    const res = await axios.put(Api_prefix + `/api/jobs/${id}`, data, {
       headers: authHeader(),
     });
     return res.data;
@@ -29,7 +30,7 @@ export const updateJobById = async (id, data) => {
 
 export const addJob = async (data) => {
   try {
-    const res = await axios.post("/api/jobs/", data, {
+    const res = await axios.post(Api_prefix + "/api/jobs/", data, {
       headers: authHeader(),
     });
     return res.data;
@@ -40,7 +41,7 @@ export const addJob = async (data) => {
 
 export const deleteJobById = async (id) => {
   try {
-    const res = await axios.delete(`/api/jobs/${id}`, {
+    const res = await axios.delete(Api_prefix + `/api/jobs/${id}`, {
       headers: authHeader(),
     });
     return res.data;
