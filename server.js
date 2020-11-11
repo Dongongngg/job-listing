@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const path = require("path");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -18,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-//routes
+//  routes
 app.use("/api/jobs", jobs);
 app.use("/api/users", users);
 
@@ -31,3 +32,11 @@ app.listen(
     `server is running on ${MODE} mode, and is listening on port ${PORT}`
   )
 );
+
+//  production static url
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
