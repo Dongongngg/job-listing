@@ -24,6 +24,7 @@ const MyInput = withStyles({
     fontSize: "calc(12px + 0.3vw)",
     color: "#717171",
     "& input": {
+      borderRadius: "1rem",
       paddingLeft: "1rem",
       "&:focus": {
         borderRadius: "1rem",
@@ -222,44 +223,47 @@ export default function Landing(props) {
             <Typography className={classes.greeting}>Welcome Back!</Typography>
             <Divider variant="middle" className={classes.divider} />
             <Paper elevation={3} className={classes.login} id="login">
-              <div className={classes.inputBox}>
-                <Typography
-                  className={classes.labels}
-                  style={{
-                    color:
-                      (!success || input.username === "") &&
-                      signInFlag &&
-                      "#e91e63",
-                  }}
-                >
-                  Username:
-                </Typography>
-                <MyInput
-                  name="username"
-                  value={input.username}
-                  onChange={handleInput}
-                  autoComplete="off"
-                ></MyInput>
-              </div>
-              <div className={classes.inputBox}>
-                <Typography
-                  className={classes.labels}
-                  style={{
-                    color:
-                      (!success || input.password === "") &&
-                      signInFlag &&
-                      "#e91e63",
-                  }}
-                >
-                  Password:
-                </Typography>
-                <MyInput
-                  name="password"
-                  value={input.password}
-                  onChange={handleInput}
-                  type="password"
-                ></MyInput>
-              </div>
+              <form>
+                <div className={classes.inputBox}>
+                  <Typography
+                    className={classes.labels}
+                    style={{
+                      color:
+                        (!success || input.username === "") &&
+                        signInFlag &&
+                        "#e91e63",
+                    }}
+                  >
+                    Username:
+                  </Typography>
+                  <MyInput
+                    name="username"
+                    value={input.username}
+                    onChange={handleInput}
+                    autoComplete="off"
+                  ></MyInput>
+                </div>
+                <div className={classes.inputBox}>
+                  <Typography
+                    className={classes.labels}
+                    style={{
+                      color:
+                        (!success || input.password === "") &&
+                        signInFlag &&
+                        "#e91e63",
+                    }}
+                  >
+                    Password:
+                  </Typography>
+                  <MyInput
+                    name="password"
+                    value={input.password}
+                    onChange={handleInput}
+                    type="password"
+                    autoComplete="off"
+                  ></MyInput>
+                </div>
+              </form>
               <div className={classes.btnBox}>
                 <div className={classes.signinBtn}>
                   <Button

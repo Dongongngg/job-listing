@@ -57,6 +57,7 @@ const useStyles = makeStyles({
   deleteBtn: {
     fontSize: "calc(12px + 0.3vw)",
     color: "#717171",
+    cursor: "pointer",
   },
   submitBtn: {
     fontSize: "0.75rem",

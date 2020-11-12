@@ -136,61 +136,65 @@ export default function DialogSignUp({
       className={classes.root}
     >
       <DialogContent>
-        <div className={classes.inputBox}>
-          <Typography
-            className={classes.labels}
-            style={{
-              color: newUser.username === "" && signUpFlag && "#e91e63",
-            }}
-          >
-            Username (6 or more characters):
-          </Typography>
-          <MyInput
-            autoComplete="off"
-            name="username"
-            placeholder="Username"
-            value={newUser.username}
-            onChange={handleChange}
-          ></MyInput>
-        </div>
-        <div className={classes.inputBox}>
-          <Typography
-            className={classes.labels}
-            style={{
-              color: newUser.password === "" && signUpFlag && "#e91e63",
-            }}
-          >
-            Password (6 or more characters):
-          </Typography>
-          <MyInput
-            name="password"
-            placeholder="Password"
-            value={newUser.password}
-            onChange={handleChange}
-            type="password"
-          ></MyInput>
-        </div>
-        <div className={classes.inputBox}>
-          <Typography
-            className={classes.labels}
-            style={{
-              color:
-                (signUpState === "Confirming password failed" ||
-                  newUser.rePassword === "") &&
-                signUpFlag &&
-                "#e91e63",
-            }}
-          >
-            Confirm password:
-          </Typography>
-          <MyInput
-            name="rePassword"
-            placeholder="Confirm password"
-            value={newUser.rePassword}
-            onChange={handleChange}
-            type="password"
-          ></MyInput>
-        </div>
+        <form>
+          <div className={classes.inputBox}>
+            <Typography
+              className={classes.labels}
+              style={{
+                color: newUser.username === "" && signUpFlag && "#e91e63",
+              }}
+            >
+              Username (6 or more characters):
+            </Typography>
+            <MyInput
+              autoComplete="off"
+              name="username"
+              placeholder="Username"
+              value={newUser.username}
+              onChange={handleChange}
+            ></MyInput>
+          </div>
+          <div className={classes.inputBox}>
+            <Typography
+              className={classes.labels}
+              style={{
+                color: newUser.password === "" && signUpFlag && "#e91e63",
+              }}
+            >
+              Password (6 or more characters):
+            </Typography>
+            <MyInput
+              autoComplete="off"
+              name="password"
+              placeholder="Password"
+              value={newUser.password}
+              onChange={handleChange}
+              type="password"
+            ></MyInput>
+          </div>
+          <div className={classes.inputBox}>
+            <Typography
+              className={classes.labels}
+              style={{
+                color:
+                  (signUpState === "Confirming password failed" ||
+                    newUser.rePassword === "") &&
+                  signUpFlag &&
+                  "#e91e63",
+              }}
+            >
+              Confirm password:
+            </Typography>
+            <MyInput
+              autoComplete="off"
+              name="rePassword"
+              placeholder="Confirm password"
+              value={newUser.rePassword}
+              onChange={handleChange}
+              type="password"
+            ></MyInput>
+          </div>
+        </form>
       </DialogContent>
       <Typography className={classes.signUpState}>{signUpState}</Typography>
       <DialogActions className={classes.actionBox}>
