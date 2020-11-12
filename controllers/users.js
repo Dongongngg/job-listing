@@ -89,6 +89,7 @@ exports.loginUser = async (req, res) => {
         success: true,
         id: loginUser._id,
         username: loginUser.name,
+        accessToken: token,
       });
     }
   } catch (err) {

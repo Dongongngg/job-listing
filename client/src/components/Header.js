@@ -27,7 +27,9 @@ const Header = ({ count }) => {
       <div>
         <StyledTypography component="h3">Welcome</StyledTypography>
         <StyledTypography component="h3" style={{ color: "rgb(75 75 196)" }}>
-          {JSON.parse(localStorage.getItem("user")).username || ""}
+          {localStorage.getItem("user")
+            ? JSON.parse(localStorage.getItem("user")).username
+            : ""}
         </StyledTypography>
       </div>
       <div>

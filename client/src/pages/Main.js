@@ -59,7 +59,11 @@ const useStyles = makeStyles({
 const Alert = ({ alert }) => {
   return (
     <Typography
-      style={{ textAlign: "center", paddingTop: "10rem", fontSize: "1.5rem" }}
+      style={{
+        textAlign: "center",
+        paddingTop: "10rem",
+        fontSize: "calc(1rem + 1vw)",
+      }}
     >
       {alert}
       {alert === "Please login" ? <Link to="/"> back</Link> : null}
@@ -71,6 +75,7 @@ export default function Main() {
   const classes = useStyles();
   const [jobLists, setJobLists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newUserFlag, setNewUserFlag] = useState(false);
   //  Filter lists
   const [filter, setFilter] = useState("");
   const [filteredJobLists, setFilteredJobLists] = useState([]);
@@ -91,6 +96,9 @@ export default function Main() {
       if (res.success) {
         setJobLists(res.data);
         setFilteredJobLists(res.data);
+        if (res.data.length === 0) {
+          setNewUserFlag(true);
+        }
         setLoading(false);
       } else if (res === "Invalid Token" || res === "Access Denied") {
         setLoginError(true);
@@ -143,6 +151,7 @@ export default function Main() {
     };
     if (dialogSuccess) {
       getJobLists();
+      setNewUserFlag(false);
     }
     return () => {
       setDialogSuccess(false);
@@ -169,6 +178,8 @@ export default function Main() {
 
           {loginError ? (
             <Alert alert="Please login" />
+          ) : newUserFlag ? (
+            <Alert alert="Please create an application" />
           ) : loading ? (
             <Alert alert="Loading..." />
           ) : (
