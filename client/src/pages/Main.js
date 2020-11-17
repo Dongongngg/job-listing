@@ -1,57 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import {
-  makeStyles,
-  Typography,
-  Paper,
-  Grid,
-  Divider,
-} from "@material-ui/core/";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
+import React, { useState, useEffect } from 'react';
+import PropType from 'prop-types';
+import { Link } from 'react-router-dom';
+import { makeStyles, Typography, Paper, Grid, Divider } from '@material-ui/core/';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 //components
-import Header from "../components/Header";
-import Filter from "../components/Filter";
-import Lists from "../components/Lists";
-import DialogEdit from "../components/DialogEdit";
-import DialogCreate from "../components/DialogCreate";
+import Header from '../components/Header';
+import Filter from '../components/Filter';
+import Lists from '../components/Lists';
+import DialogEdit from '../components/DialogEdit';
+import DialogCreate from '../components/DialogCreate';
 
 //axios api
-import * as jobApi from "../api/jobs";
+import * as jobApi from '../api/jobs';
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: "#BFE1F1",
-    minHeight: "100vh",
+    backgroundColor: '#BFE1F1',
+    minHeight: '100vh',
   },
   paper: {
-    margin: "5vh 0",
-    "@media (max-width: 780px)": {
-      margin: "5vh 0",
+    margin: '5vh 0',
+    '@media (max-width: 780px)': {
+      margin: '5vh 0',
     },
-    backgroundColor: "#F5F5F5",
-    borderRadius: "1rem",
-    minHeight: "80vh",
+    backgroundColor: '#F5F5F5',
+    borderRadius: '1rem',
+    minHeight: '80vh',
   },
   filterBox: {
-    display: "flex",
-    justifyContent: "space-evenly",
-    padding: "2rem",
-    "@media (max-width: 780px)": {
-      padding: "1rem",
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    padding: '2rem',
+    '@media (max-width: 780px)': {
+      padding: '1rem',
     },
   },
   addIcon: {
-    color: "#01579B",
-    cursor: "pointer",
-    transition: "all 0.5s",
-    "&:hover": {
-      transform: "rotate(90deg)",
+    color: '#01579B',
+    cursor: 'pointer',
+    transition: 'all 0.5s',
+    '&:hover': {
+      transform: 'rotate(90deg)',
     },
-    height: "5vh",
-    width: "5vh",
-    "@media (max-width: 780px)": {
-      height: "4vh",
-      width: "4vh",
+    height: '5vh',
+    width: '5vh',
+    '@media (max-width: 780px)': {
+      height: '4vh',
+      width: '4vh',
     },
   },
 });
@@ -60,15 +55,19 @@ const Alert = ({ alert }) => {
   return (
     <Typography
       style={{
-        textAlign: "center",
-        paddingTop: "10rem",
-        fontSize: "calc(1rem + 1vw)",
+        textAlign: 'center',
+        paddingTop: '10rem',
+        fontSize: 'calc(1rem + 1vw)',
       }}
     >
       {alert}
-      {alert === "Please login" ? <Link to="/"> back</Link> : null}
+      {alert === 'Please login' ? <Link to="/"> back</Link> : null}
     </Typography>
   );
+};
+
+Alert.propTypes = {
+  alert: PropType.string,
 };
 
 export default function Main() {
@@ -77,7 +76,7 @@ export default function Main() {
   const [loading, setLoading] = useState(true);
   const [newUserFlag, setNewUserFlag] = useState(false);
   //  Filter lists
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   const [filteredJobLists, setFilteredJobLists] = useState([]);
   //  Dialog open
   const [openEdit, setOpenEdit] = useState(false);
@@ -100,7 +99,7 @@ export default function Main() {
           setNewUserFlag(true);
         }
         setLoading(false);
-      } else if (res === "Invalid Token" || res === "Access Denied") {
+      } else if (res === 'Invalid Token' || res === 'Access Denied') {
         setLoginError(true);
       }
     };
@@ -108,18 +107,18 @@ export default function Main() {
   }, []);
   //  Set filter results as filter input changes
   useEffect(() => {
-    if (filter === "") {
+    if (filter === '') {
       setFilteredJobLists(jobLists);
     } else {
       let filterResults = jobLists.filter((e) =>
-        e.title.toLowerCase().includes(filter.toLowerCase())
+        e.title.toLowerCase().includes(filter.toLowerCase()),
       );
       setFilteredJobLists(filterResults);
     }
   }, [filter, jobLists]);
 
   const handleClearFilter = () => {
-    setFilter("");
+    setFilter('');
   };
 
   //  Handle filter input
@@ -169,10 +168,7 @@ export default function Main() {
               handleInput={handleFilterInput}
               handleClear={handleClearFilter}
             />
-            <AddCircleIcon
-              className={classes.addIcon}
-              onClick={handleClickOpenCreate}
-            />
+            <AddCircleIcon className={classes.addIcon} onClick={handleClickOpenCreate} />
           </div>
           <Divider variant="middle" />
 
@@ -184,11 +180,7 @@ export default function Main() {
             <Alert alert="Loading..." />
           ) : (
             filteredJobLists.map((jobList, i) => (
-              <Lists
-                key={i}
-                crtJob={jobList}
-                handleClickOpenEdit={handleClickOpenEdit}
-              />
+              <Lists key={i} crtJob={jobList} handleClickOpenEdit={handleClickOpenEdit} />
             ))
           )}
         </Paper>

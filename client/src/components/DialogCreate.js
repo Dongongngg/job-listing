@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {
   Dialog,
   DialogActions,
@@ -10,125 +11,124 @@ import {
   Typography,
   Select,
   MenuItem,
-} from "@material-ui/core";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
+} from '@material-ui/core';
+import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 //axios api
-import * as jobApi from "../api/jobs";
+import * as jobApi from '../api/jobs';
 const useStyles = makeStyles({
   titleBox: {
-    display: "flex",
-    justifyContent: "center",
+    display: 'flex',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: "1.25rem",
-    padding: "1rem",
+    fontSize: '1.25rem',
+    padding: '1rem',
   },
   contentBox: {
-    padding: "0rem 2rem",
+    padding: '0rem 2rem',
   },
   inputBox: {
-    margin: "1rem",
-    "@media (max-width: 780px)": {
-      margin: "0.5rem",
+    margin: '1rem',
+    '@media (max-width: 780px)': {
+      margin: '0.5rem',
     },
   },
   actionBox: {
-    paddingTop: "2rem",
-    justifyContent: "space-around",
-    alignItems: "flex-end",
+    paddingTop: '2rem',
+    justifyContent: 'space-around',
+    alignItems: 'flex-end',
   },
   labels: {
-    paddingLeft: "0.5rem",
-    fontWeight: "500",
-    fontSize: "calc(15px + 0.3vw)",
-    "@media (max-width: 780px)": {
-      padding: "0.5rem 0 0.25rem 0.25rem",
+    paddingLeft: '0.5rem',
+    fontWeight: '500',
+    fontSize: 'calc(15px + 0.3vw)',
+    '@media (max-width: 780px)': {
+      padding: '0.5rem 0 0.25rem 0.25rem',
     },
   },
   datePicker: {
-    border: "none",
-    "& .MuiInputBase-root": {
-      borderRadius: "1rem",
-      fontSize: "calc(12px + 0.3vw)",
-      "& .MuiOutlinedInput-input": { padding: "0.5rem 0.5rem 0.5rem 1rem" },
+    border: 'none',
+    '& .MuiInputBase-root': {
+      borderRadius: '1rem',
+      fontSize: 'calc(12px + 0.3vw)',
+      '& .MuiOutlinedInput-input': { padding: '0.5rem 0.5rem 0.5rem 1rem' },
     },
   },
   cancelBtn: {
-    color: "#717171",
-    backgroundColor: "#e0e0e0",
-    fontSize: "0.75rem",
-    borderRadius: "1rem",
-    "&:hover": {
-      backgroundColor: "#d0d0d0",
+    color: '#717171',
+    backgroundColor: '#e0e0e0',
+    fontSize: '0.75rem',
+    borderRadius: '1rem',
+    '&:hover': {
+      backgroundColor: '#d0d0d0',
     },
   },
   submitBtn: {
-    fontSize: "0.75rem",
-    backgroundColor: "#01579B",
-    color: "#fff",
-    borderRadius: "1rem",
-    "&:hover": {
-      backgroundColor: "#01476d",
+    fontSize: '0.75rem',
+    backgroundColor: '#01579B',
+    color: '#fff',
+    borderRadius: '1rem',
+    '&:hover': {
+      backgroundColor: '#01476d',
     },
   },
 });
 const Alert = ({ alert }) => {
   return (
-    <Typography style={{ textAlign: "center" }}>
+    <Typography style={{ textAlign: 'center' }}>
       {alert}
-      {alert === "Please login" ? <Link to="/"> back</Link> : null}
+      {alert === 'Please login' ? <Link to="/"> back</Link> : null}
     </Typography>
   );
 };
+Alert.propTypes = {
+  alert: PropTypes.string,
+};
 const MySelect = withStyles({
-  root: { width: "100%", color: "#717171" },
+  root: { width: '100%', color: '#717171' },
   input: {
-    borderRadius: "1rem",
-    border: "#9c9c9c 0.5px solid",
-    fontSize: "calc(12px + 0.3vw)",
-    padding: "6px 1rem 7px",
-    color: "#717171",
-    "&:focus": {
-      padding: "6px 1rem 7px",
-      borderRadius: "1rem",
-      backgroundColor: "white",
+    borderRadius: '1rem',
+    border: '#9c9c9c 0.5px solid',
+    fontSize: 'calc(12px + 0.3vw)',
+    padding: '6px 1rem 7px',
+    color: '#717171',
+    '&:focus': {
+      padding: '6px 1rem 7px',
+      borderRadius: '1rem',
+      backgroundColor: 'white',
     },
   },
 })(InputBase);
 
 const MyInput = withStyles({
   root: {
-    width: "100%",
-    border: "#9c9c9c 0.5px solid",
-    borderRadius: "1rem",
-    fontSize: "calc(12px + 0.3vw)",
-    color: "#717171",
-    "& input": {
-      paddingLeft: "1rem",
+    width: '100%',
+    border: '#9c9c9c 0.5px solid',
+    borderRadius: '1rem',
+    fontSize: 'calc(12px + 0.3vw)',
+    color: '#717171',
+    '& input': {
+      paddingLeft: '1rem',
     },
   },
 })(InputBase);
 
-export default function DialogEdit({
-  openCreate,
-  handleCloseCreate,
-  setDialogSuccess,
-}) {
+export default function DialogCreate({ openCreate, handleCloseCreate, setDialogSuccess }) {
   const classes = useStyles();
   //0:event.target.name 1:display text
   const inputs = [
-    ["companyName", "Company"],
-    ["source", "Applied from"],
+    ['companyName', 'Company'],
+    ['source', 'Applied from'],
   ];
 
   const [newJob, setNewJob] = useState({
-    jobTitle: "",
-    jobLevel: "",
-    companyName: "",
-    source: "",
+    jobTitle: '',
+    jobLevel: '',
+    companyName: '',
+    source: '',
     appliedDate: new Date(),
-    state: "",
+    state: '',
   });
   const [createFlag, setCreateFlag] = useState(false);
   // Connection failed
@@ -140,23 +140,23 @@ export default function DialogEdit({
   //  dialog submit btn
   const handleSubmit = async () => {
     setCreateFlag(true);
-    if (newJob.jobTitle !== "") {
+    if (newJob.jobTitle !== '') {
       let res = await jobApi.addJob(newJob);
 
       if (res.success) {
         handleCloseCreate();
         setDialogSuccess(true);
         setNewJob({
-          jobTitle: "",
-          jobLevel: "",
-          companyName: "",
-          source: "",
+          jobTitle: '',
+          jobLevel: '',
+          companyName: '',
+          source: '',
           appliedDate: new Date(),
-          state: "",
+          state: '',
         });
         setCreateFlag(false);
         console.log(res);
-      } else if (res === "Invalid Token" || res === "Access Denied") {
+      } else if (res === 'Invalid Token' || res === 'Access Denied') {
         setLoginError(true);
         console.log(res);
       } else {
@@ -170,11 +170,7 @@ export default function DialogEdit({
   };
 
   return (
-    <Dialog
-      open={openCreate}
-      onClose={handleCloseCreate}
-      className={classes.root}
-    >
+    <Dialog open={openCreate} onClose={handleCloseCreate} className={classes.root}>
       <div className={classes.titleBox}>
         <Typography className={classes.title}>Create Job</Typography>
       </div>
@@ -185,18 +181,18 @@ export default function DialogEdit({
             name="jobLevel"
             className={classes.input}
             input={<MySelect />}
-            value={newJob.jobLevel || ""}
+            value={newJob.jobLevel || ''}
             onChange={handleChange}
           >
-            <MenuItem value={"Junior"}>Junior</MenuItem>
-            <MenuItem value={"Middle"}>Middle</MenuItem>
-            <MenuItem value={"Senior"}>Senior</MenuItem>
+            <MenuItem value={'Junior'}>Junior</MenuItem>
+            <MenuItem value={'Middle'}>Middle</MenuItem>
+            <MenuItem value={'Senior'}>Senior</MenuItem>
           </Select>
         </div>
         <div className={classes.inputBox}>
           <Typography
             className={classes.labels}
-            style={{ color: newJob.jobTitle === "" && createFlag && "#e91e63" }}
+            style={{ color: newJob.jobTitle === '' && createFlag && '#e91e63' }}
           >
             *Title:
           </Typography>
@@ -204,7 +200,7 @@ export default function DialogEdit({
             autoFocus={true}
             name="jobTitle"
             placeholder="jobTitle"
-            value={newJob.jobTitle || ""}
+            value={newJob.jobTitle || ''}
             onChange={handleChange}
           ></MyInput>
         </div>
@@ -214,7 +210,7 @@ export default function DialogEdit({
             <MyInput
               name={e[0]}
               placeholder={e[1]}
-              value={newJob[e[0]] || ""}
+              value={newJob[e[0]] || ''}
               onChange={handleChange}
             ></MyInput>
           </div>
@@ -226,12 +222,12 @@ export default function DialogEdit({
             name="state"
             className={classes.input}
             input={<MySelect />}
-            value={newJob.state || ""}
+            value={newJob.state || ''}
             onChange={handleChange}
           >
-            <MenuItem value={"Submit"}>Submit</MenuItem>
-            <MenuItem value={"Interview"}>Interview</MenuItem>
-            <MenuItem value={"Test"}>Test</MenuItem>
+            <MenuItem value={'Submit'}>Submit</MenuItem>
+            <MenuItem value={'Interview'}>Interview</MenuItem>
+            <MenuItem value={'Test'}>Test</MenuItem>
           </Select>
         </div>
         <div className={classes.inputBox}>
@@ -270,3 +266,9 @@ export default function DialogEdit({
     </Dialog>
   );
 }
+
+DialogCreate.propTypes = {
+  openCreate: PropTypes.bool,
+  handleCloseCreate: PropTypes.func,
+  setDialogSuccess: PropTypes.func,
+};

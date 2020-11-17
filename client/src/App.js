@@ -1,11 +1,11 @@
-import React from "react";
-import { Router, Switch, Route } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import React from 'react';
+import { Router, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 // pages
-import Landing from "./pages/Landing";
-import Main from "./pages/Main";
+import Landing from './pages/Landing';
+import Main from './pages/Main';
 //style
-import "./styles/App.css";
+import './styles/App.css';
 
 function App() {
   const history = createBrowserHistory();

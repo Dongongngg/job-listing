@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyle = makeStyles({
   jobList: {
-    textAlign: "center",
-    width: "50%",
-    "@media (max-width: 780px)": {
-      width: "100%",
+    textAlign: 'center',
+    width: '50%',
+    '@media (max-width: 780px)': {
+      width: '100%',
     },
   },
 });
@@ -22,11 +22,7 @@ export default function JoblistSVG() {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g id="job-list" clipPath="url(#clip0)">
-        <path
-          id="ground"
-          d="M790 699.992H0V701.992H790V699.992Z"
-          fill="#3F3D56"
-        />
+        <path id="ground" d="M790 699.992H0V701.992H790V699.992Z" fill="#3F3D56" />
         <g id="user">
           <path
             id="Vector"
