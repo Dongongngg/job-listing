@@ -1,10 +1,7 @@
-const Users = require("../models/users");
-const {
-  registerValidation,
-  loginValidation,
-} = require("../middlewares/validation");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const Users = require('../models/users');
+const { registerValidation, loginValidation } = require('../middlewares/validation');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // @desc    add users
 // @route   POST /api/users/new
@@ -23,7 +20,7 @@ exports.addUser = async (req, res) => {
   if (exist) {
     return res.status(200).json({
       success: false,
-      error: "User exist.",
+      error: 'User exist.',
     });
   }
   //  Hash password
@@ -67,25 +64,22 @@ exports.loginUser = async (req, res) => {
     if (!loginUser) {
       return res.status(401).json({
         success: false,
-        error: "Name not exist.",
+        error: 'Name not exist.',
       });
     }
     //  Check if password is correct
-    const validPass = await bcrypt.compare(
-      req.body.password,
-      loginUser.password
-    );
+    const validPass = await bcrypt.compare(req.body.password, loginUser.password);
     if (!validPass) {
       return res.status(401).json({
         success: false,
-        error: "Password is wrong.",
+        error: 'Password is wrong.',
       });
     } else {
       const token = jwt.sign({ _id: loginUser._id }, process.env.TOKEN_SECRET, {
         expiresIn: 3600,
       });
 
-      return res.header("auth-token", token).status(200).json({
+      return res.header('auth-token', token).status(200).json({
         success: true,
         id: loginUser._id,
         username: loginUser.name,

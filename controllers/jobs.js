@@ -1,4 +1,4 @@
-const Jobs = require("../models/jobs");
+const Jobs = require('../models/jobs');
 
 // @desc    get all jobs for current login user
 // @route   GET /api/jobs
@@ -41,7 +41,7 @@ exports.addJobs = async (req, res, next) => {
     });
   } catch (err) {
     //  if no title
-    if (err.name === "ValidationError") {
+    if (err.name === 'ValidationError') {
       const messages = Object.values(err.errors).map((e) => e.message);
 
       res.status(422).json({
@@ -66,13 +66,13 @@ exports.deleteJobs = async (req, res, next) => {
     if (!job) {
       return res.status(401).json({
         success: false,
-        error: "No job found",
+        error: 'No job found',
       });
     }
     await job.remove();
     return res.status(200).json({
       success: true,
-      data: "Job removed",
+      data: 'Job removed',
     });
   } catch (err) {
     return res.send(500).json({
@@ -90,7 +90,7 @@ exports.updateJobs = async (req, res, next) => {
     if (!job) {
       return res.status(401).json({
         success: false,
-        error: "No job found",
+        error: 'No job found',
       });
     }
     await job.updateOne({
@@ -103,7 +103,7 @@ exports.updateJobs = async (req, res, next) => {
     });
     return res.status(200).json({
       success: true,
-      data: "Job updated",
+      data: 'Job updated',
     });
   } catch (err) {
     return res.status(500).json({

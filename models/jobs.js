@@ -1,10 +1,10 @@
-const monogoos = require("mongoose");
+const monogoos = require('mongoose');
 
 const JobSchema = new monogoos.Schema({
   title: {
     type: String,
     trim: true,
-    required: [true, "please add a title"],
+    required: [true, 'please add a title'],
   },
   level: {
     type: String,
@@ -33,4 +33,4 @@ const JobSchema = new monogoos.Schema({
   },
 });
 
-module.exports = monogoos.model("Jobs", JobSchema);
+module.exports = monogoos.model('Jobs', JobSchema);
